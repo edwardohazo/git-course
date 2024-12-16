@@ -1,0 +1,17 @@
+# esto es un comentario
+ignorado.txt
+carpetaIgnorada
+/archivo_desde_la_raíz_del_repositorio
+
+# ignorar todos los archivos que temrinen en .log
+# *.log
+# expepto
+!production.log
+
+# ignorar los archivos terminados en .txt dentro de la carpeta doc
+# pero no en sus subcarpetas
+doc/*.txt
+
+# ignorar los archivos terminados en .txt dentro de la carpeta doc
+# y también en sus subcarpetas
+doc/**/*.txt

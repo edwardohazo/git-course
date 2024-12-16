@@ -1,0 +1,53 @@
+commit dde02a5852d2286090c4e404129cd2f7e0775591
+Merge: d5ed899 fed39b6
+Author: Eduardo Jasso <70908864+edwardohazo@users.noreply.github.com>
+Date:   Mon Jul 17 11:57:33 2023 -0700
+
+    Merge pull request #2 from Eduardohazo/branch2
+    
+    Mejoras ligeras en readme.md
+
+commit fed39b65eb602d5b42c52a81701559789e3a9c4d
+Author: wato <eduardo.gonzalez.dev@gmail.com>
+Date:   Mon Jul 17 12:50:06 2023 -0700
+
+    Mejoras ligeras en readme.md
+
+commit fd44dc03b31946877a58910957bfc284ead2ccd3
+Author: wato <eduardo.gonzalez.dev@gmail.com>
+Date:   Mon Jul 17 12:30:37 2023 -0700
+
+    Mejoras en el readme del repositorio
+
+commit d5ed899be9afb5d66abf742541e8cdf1b591ff1f
+Merge: c59691d fd44dc0
+Author: Eduardo Jasso <70908864+edwardohazo@users.noreply.github.com>
+Date:   Mon Jul 17 11:48:40 2023 -0700
+
+    Merge pull request #1 from Eduardohazo/branch2
+    
+    Branch2
+
+commit ec2fa7d86c134769ca6c8f79fda035ddf1986f63
+Author: wato <eduardo.gonzalez.dev@gmail.com>
+Date:   Mon Jul 17 11:16:05 2023 -0700
+
+    First commit on account eduardo.gonzalez.dev@gmail
+
+commit c59691da339795ffd4dbf082795f98cd90ccd301
+Author: wago <newguyonthemarket@gmail.com>
+Date:   Mon Jul 17 10:27:44 2023 -0700
+
+    Second Commit / gh page
+
+commit 67e25b4dfab5b616d9493ab23b5fe54736a7d885
+Author: wago <newguyonthemarket@gmail.com>
+Date:   Mon Jul 17 09:50:38 2023 -0700
+
+    v1.0.0
+
+commit d62e8d92ee4f424b7a8c6fbf5f21f001e5460ec6
+Author: wago <newguyonthemarket@gmail.com>
+Date:   Sun Jul 16 22:09:36 2023 -0700
+
+    First commit

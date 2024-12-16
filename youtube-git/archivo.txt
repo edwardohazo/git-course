@@ -1,0 +1,153 @@
+
+REGISTRO
+LOGIN
+
+DESARROLLOWEB.COM
+ TEMAS
+ MANUALES
+ FAQS
+ CANALES
+ COLECCIONES
+PRINCIPALES TEMAS:
+Diseño
+HTML
+CSS
+Javascript
+PHP
+.NET
+USUARIOS:
+LOGIN REGISTRO
+Lectura de archivos con NodeJS
+Javascript NodeJS
+Tiempo de lectura:
+10 min
+
+>
+Manuales
+>
+Manual de NodeJS
+Última actualización: 22 de mayo de 2023
+Cómo trabajar con "fs" el módulo nativo de NodeJS para la lectura y escritura de archivos en el sistema de archivos del ordenador. Cómo realizar la operación de lectura de archivos de texto en Node.
+
+Lectura de archivos con NodeJS
+
+En NodeJS todas las operaciones de acceso al sistema de archivos están englobadas dentro del módulo "fs" (File System). Si queremos leer un archivo de texto que tenemos en local simplemte usaremos ese módulo para extraer el contenido del fichero, indicando su ruta y otra serie de parámetros que ahora describiremos.
+
+En lo que respecta a los métodos del módulo fs hay que señalar que se entregan en dos alternativas, tanto síncrona como asíncrona, que pueden cubrir diferentes situaciones y necesidades que tengamos. Quizás esta sea la parte más destacable del API de NodeJS, del que seguro que ya nos venimos familiarizando a lo largo del Manual de Node, la necesidad de lidiar con funciones asíncronas y sus callback. Lo explicaremos con detalle.
+
+Importar el módulo fs
+Igual que hacemos con otros módulos de Node, hay que procesar el correspondiente require para tener disponibles las funciones de acceso al sistema de ficheros. Se encuentran en el module llamado 'fs' y lo vamos a importar con el siguiente código:
+
+let fs = require('fs');
+Nota: El nombre del objeto para operar con el sistema de archivos lo hemos guardado en una variable llamada 'fs'. Podrías usar el nombre de variable que tú desees. Observa además que en vez de "var" estamos usando "let", que es la forma más habitual de declarar variables en ES6. Método readFile() asíncrono.
+Este método accede a un fichero para su lectura y nos entrega el contenido en forma de buffer o en forma de cadena.
+
+fs.readFile(archivo [, options], callback)
+Recibe tres parámetros, siendo el segundo de ellos opcional. En el primer parámetro le indicamos el nombre del archivo que deseamos leer. Generalmente será una cadena de texto que contenga el nombre del archivo y la ruta que estamos accediendo, pero también podrá ser un buffer.
+
+El segundo parámetro, el opcional, puede ser tanto un objeto como una cadena. Generalmente le indicarás una cadena que contendrá el juego de caracteres en el que el archivo está codificado, por ejemplo 'utf-8'.
+
+El tercer parámetro es la función callback, que se ejecutará en el momento que el archivo está leído y se encuentra disponible para hacer alguna cosa. Esta función recibirá dos parámetros, el archivo ya leído o bien, si ocurre algún error, entonces recibiremos el correspondiente objeto de error de Node. Se puede ver en el siguiente ejemplo:
+
+let fs = require('fs');
+
+
+fs.readFile('archivo.txt', 'utf-8', (err, data) => {
+  if(err) {
+    console.log('error: ', err);
+  } else {
+    console.log(data);
+  }
+});
+Nota: Estoy usando la notación 'arrow function' de ES6 para resumir las funciones de Javascript en menos código. Esto es perfectamente compatible con las versiones modernas de Node y una recomendación por varios motivos.
+Si ese archivo existe, simplemente veremos su contenido como salida del programa. Ojo en este punto, pues si no indicas la codificación, la función te devolverá un buffer en lugar del string.
+
+Si el archivo no existía, nos mostrará el error y podremos ver los diferentes campos del objeto error de node, desde los que podremos saber qué es lo que ha ocurrido. La salida sería parecida a esta:
+
+error:  { Error: ENOENT: no such file or directory, open 'archivo-inexistente.txt'
+    at Error (native)
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'archivo-inexistente.txt' }
+Acceder al contenido del fichero de texto como un buffer
+Hemos dicho que si no indicas la codificación de caracteres, Node te devolverá el contenido como un buffer. En un artículo anterior ya explicamos qué son los buffer en Node, pero ahora los vamos a ver usar en el contexto de la lectura de un archivo de texto.
+
+Realmente es muy fácil. Lo puedes ver en este código:
+
+let fs = require('fs');
+
+fs.readFile(__dirname + '/fichero.txt', function(err, data) {
+  if (! err) {
+    console.log(data.toString());
+  }
+});
+Simplemente, estamos enviando a la consola el contenido del archivo de texto, recibido como un buffer, pero convertido en una cadena, con lo que el resultado sería el mismo que antes.
+
+Método readFileSync síncrono
+Como alternativa tenemos el método readFileSync() que hace básicamente lo mismo, pero bloquea la ejecución de las siguientes líneas de código hasta que la lectura haya concluído y se tenga el contenido del archivo completo.
+
+Nota: Digamos que este método equivaldría a la lectura de archivos en la mayoría de los lenguajes de programación. Al ejecutarse bloquea el flujo de ejecución actual, de modo que el código del programa se procesará siempre de manera secuencial.
+El método se usa igual, solo que dispensamos la función callback.
+
+fs.readFileSync(file[, options])
+Otra diferencia es que el archivo leído será devuelto por la función. Podemos ver un ejemplo a continuación.
+
+let archivo = fs.readFileSync('archivo2.txt', 'utf-8');
+En esta función, en caso de ocurrir algún tipo de error se lanzará una excepción. En el anterior código no lo hemos realizado, pero se debería tratar si no queremos romper la ejecución del programa.
+
+Lectura síncrona / asíncrona
+Primero hay que admitir que la programación se simplifica bastante con la función síncrona, pero lo cierto es que para que el código de ambos ejemplos fuera equivalente, tendríamos que haber tratado en error, en cuyo caso el resultado se comenzará a parecer en complejidad.
+
+La ventaja de la funcion síncrona es que quizás, para muchas personas, sea más sencillo de codificar, ya que te ahorras las funciones callback. La desventaja es que el procesamiento estará menos optimizado, ya que el hilo de ejecución se quedará unos instantes simplemente esperando, incapaz de adelantar trabajo con el resto del script. en cualquier caso, las diferencias de optimización de la función asíncrona se notarán más con la lectura de varios archivos grandes, o cuando hay diversos accesos concurrentes al servidor donde se realizan diversos tipos de operaciones.
+
+Para acabar vamos a dejar un código que pone en demostración el flujo de ejecución del programa, usando las dos variantes, síncrona y asíncrona. Es interesante que lo analices y trates de averiguar qué mensajes se mostrarán antes o después.
+
+let fs = require('fs');
+
+
+fs.readFile('archivo-inexistente.txt', 'utf-8', (err, data) => {
+  if(err) {
+    console.log('error: ', err);
+  } else {
+    console.log(data);
+  }
+});
+console.log('esto se ejecuta antes que esté el archivo');
+
+
+let archivo = fs.readFileSync('archivo2.txt', 'utf-8');
+console.log(archivo);
+
+
+console.log('Esto se muestra después de haber leído el achivo2.txt (por el readFileSync)');
+
+Miguel Angel Alvarez
+
+Fundador de DesarrolloWeb.com y la plataforma de formación online EscuelaIT. Com...
+
+
+ Manual
+Manual de NodeJS
+Módulo path en NodeJS
+Variables de entorno en NodeJS, acceso y definición
+¿Te ha resultado útil este artículo?
+(2)
+(0)
+¿Alguna duda?
+Pregunta y ayuda en la comunidad con tus respuestas en la sección de FAQ
+HACER UNA PREGUNTA
+Aprender
+Manuales
+Temas
+Gestionar descargas
+Canales
+Comunidad
+Preguntas y respuestas
+Hacer una pregunta
+Colecciones
+Experiencia
+ 
+ 
+ 
+Home Datos legales Privacidad Política de cookies Contacto

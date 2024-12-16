@@ -1,0 +1,387 @@
+Conceptos:
+Estado del proyecto .- Estructura conformada por los directorios y el contenido de sus archivos de cada confirmación (commit). 
+Puntero .- Variable que almacena la referencia a otra variable.
+Head .- Es un puntero que apunta o bien al último commit de la rama activa (en el caso más común) o a un commit específico (en el caso de un estado "detached HEAD"). En ambos casos, el commit al que apunta HEAD contiene el árbol de nodos que representa el estado actual del proyecto, estado con base en el cual se forma inicialmente el directorio de trabajo (working directory).
+Repositorio .- Unidad conformada por la carpeta .git dentro del working directory y los archivos dentro del working directory confirmados en ella mediante commits.
+
+Git - Es un sistema de control de versiones distribuido y descentralizado que permite a un equipo de desarrolladores trabajar 
+sobre el mismo código. Se denomina "distribuido" porque cada miembro del equipo dispone de una copia completa del código.
+GitHub - Es una plataforma social puesta a disposición por la nube (sistema virtual) que interactúa con GIT para compartir proyectos versionados y administrados con GIT.
+
+Flujo básico del versionado en git (Se divide en 4 estados):
+* Working directory (modified) - Es el área correspondiente al estado modified y es la carpeta local de la computadora donde se almacenan los archivos de un proyecto.
+* Staging Area o Index (staged): Es un estado intermedio entre el directorio de trabajo y el repositorio, donde los archivos modificados se preparan 
+                        para ser incluidos en la siguiente confirmación, pero aún no se han guardado en la historia del repositorio.
+* Git local directory / repository (commited) - En este estado, los archivos han sido confirmados y guardados en el repositorio local de Git. Cada confirmación crea un 
+                             nuevo punto en la historia del repositorio, lo que permite la recuperación de versiones anteriores si es necesario.
+
+                            A continuación una descripción detallada del proceso de un commit:
+
+                            1. Cuando se realiza un commit se toma un snapshot que captura el estado del proyecto.
+                            2. Git utiliza esa snapshot para construir un arbol de objetos, también llamado árbol de directorios, que representa el estado actual 
+                            y la estructura jerárquica de los archivos y directorios del proyecto. Los nodos que conforman el árbol representan punteros a los 
+                            directorios del proyecto y a los objetos blob que representan el contenido de los archivos del proyecto en su última confirmación. 
+                            3. Un commit es una entidad u objeto al que se le asigna un id hash SHA-1, incluye el snapshot, metadatos, una referencia al commit padre y 
+                            una referencia al árbol de objetos o nodos.
+
+* Git remote directory / repository (saved remotly) - Es el área correspondiente al estado remote y es el directorio remoto donde almacenamos los archivos del proyecto en alguna 
+plataforma web como GitHub, GitLab, BitBucket. Git denomina origin al repositorio remoto.
+
+.git - Carpeta oculta que se crea en la raíz de un repositorio Git. Esta carpeta contiene todos los archivos y metadatos necesarios para gestionar 
+       el repositorio y su historial de versiones.
+
+Estados locales:
+Working directory - Archivos que no están preparados para ser registrados en el historial del repositorio (Modificaciones constantes sin ser rastreadas por git)
+Staging Area - Archivos que ya están preparados para ser registrado en el historial del repositorio (Modificaciones eventuales rastreadas por git)
+git local directory - Archivos que quedan registrado con su estado actual en el historial del repositorio (Inmodificables una vez registrado)
+
+Estado remoto:
+git remote directory - Archivos que se envían a la plataforma social
+
+Configuración inicial:
+git --version
+git config --global user.name "Jonathan MirCha"
+git config --global user.email jonmircha@gmail.com
+git config --global user.ui true
+git config --global init.defaultBranch main
+git config --list
+# asignando visual studio code como el editor nucleo quie realiza la configuración de git
+git config --global core.editor "code --wait"
+git config --global -e
+# para estandarizar los saltos de línea en windows
+git config --global core.autocrlf true | Si configuras core.autocrlf en true o input, Git realizará la conversión automática de las secuencias de escape que representan los saltos de línea según el formato establecido en el sistema operativo del usuario al realizar un commit, clone o checkout. De lo contrario las secuencias de escape permaneceran con el formato en que fueron escritas y almacenadas en el archivo.
+# para estandarizar los saltos de línea en linux/mac
+git config --global core.autocrlf input
+# ver todas las opciones (banderas) de la configuración de git en la terminal
+git config -h
+# ver todas las opciones de la configuración en el navegador
+git help config
+
+
+Comandos principales
+# Inicializar un repositorio
+git init
+
+# agregar todos los cambios de todos los archivos al staged
+git add archivo/directorio
+git add .
+
+
+# los cambios son comprometidos en el repositorio
+# debes escribir el mensaje del cambio
+# cuando se abra el archivo de configuración
+# al terminar guarda y cierra el archivo
+# para que los cambios tengan efecto
+git commit
+# es un shortcut del comando anterior
+# escribes y confirmas el mensaje del cambio en un sólo paso
+git commit -m "mensaje descriptivo del cambio"
+
+
+# se agrega el origen remoto de tu repositorio de GitHub
+git remote add origin https://github.com/usuario/repositorio.git
+# la primera vez que vinculamos el repositorio remoto con el local
+git push -u origin master
+# para las subsecuentes actualizaciones, sino cambias de rama
+git push
+
+
+# Descargar repositorios a local con cambios
+git pull
+
+
+DE MASTER A main
+
+Para repositorios nuevos
+git init
+git add .
+git commit -m "Primer commit"
+git branch -M main
+git remote add origin https://github.com/usuario/repositorio.git
+git push -u origin main
+
+Para repositorios existentes
+git branch -M main
+git remote add origin https://github.com/usuario/repositorio.git
+git push -u origin main
+
+
+Para reemplazar la rama master por main en GitHub
+# Paso 1
+# Crea la rama local main y pásale el historial de la rama master
+git branch -m master main
+
+
+# Paso 2
+# Haz un push de la nueva rama local main en el repositorio remoto de GitHub
+git push -u origin main
+
+
+# Paso 3
+# Cambia el HEAD actual a la rama main | Especifica que ramá del repositorio remoto es la rama por defecto en el repositorio local
+git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+
+
+RAMAS (Branch)
+
+Rama (branch) - Es una línea secundaria de commits secuenciales.
+
+Comando de las ramas
+
+# crear rama
+git branch nombre-rama
+
+# cambiar de rama
+git checkout nombre-rama
+
+# crear una rama y cambiarte a ella
+git checkout -b rama
+
+# eliminar rama
+git branch -d nombre-rama
+
+# eliminar ramas remotas
+git push origin --delete nombre-rama
+
+#eliminar rama (forzado)
+git branch -D nombre-rama
+
+# listar todas las ramas del repositorio
+git branch
+
+# lista ramas no fusionadas a la rama actual
+git branch --no-merged
+
+# lista ramas fusionadas a la rama actual
+git branch --merged
+
+# rebasar ramas
+git checkout rama-secundaria
+git rebase rama-principal
+
+
+FUSIONES
+
+Une dos ramas. Para hacer una fusión necesitamos:
+
+1. Situarnos en la rama que se quedará con el contenido fusionado.
+Fusionar.
+2. Cuando se fusionan ramas se pueden dar 2 resultados diferentes:
+
+Fast-Forward: La fusión se hace automática, no hay conflictos por resolver.
+Manual Merge: La fusión hay que hacerla manual, para resolver conflictos de duplicación de contenido.
+# nos cambiamos a la rama principal que quedará de la fusión
+git checkout rama-principal
+
+# ejecutamos el comando merge con la rama secundaria a fusionar
+git merge rama-secundaria
+
+
+CAMBIOS
+
+Puedes agregar modificaciones al último cambio (commit)
+
+# sin editar el mensaje del último commit
+git commit --amend --no-edit
+
+# editando el mensaje del último commit
+git commit --amend -m "nuevo mensaje para el último commit"
+
+# eliminar el último commit
+git reset --hard HEAD~1
+Podemos cambiar de rama o desplazarnos en el historial del repositorio hacia atrás o adelante en cambios (commits), sin afectar el repositorio como tal.
+
+# cambiar a una rama
+git checkout nombre-rama
+
+# cambiar a un commit en particular
+git checkout id-commit
+
+
+REGISTRO DEL HISTORIAL 
+
+git log nos permite conocer todo el historial de un proyecto, con la información de la fecha, el autor y id de cada cambio.
+
+git log
+
+# muestra en una sola línea por cambio
+git log --oneline
+
+# guarda el log en la ruta y archivo que especifiquemos
+git log > commits.txt
+
+# muestra el historial con el formato que indicamos
+git log --pretty=format:"%h - %an, %ar : %s"
+
+# cambiamos la n por cualquier número entero y mostrará los n cambios recientes
+git log -n
+
+# muestra los cambios realizados después de la fecha especificada
+git log --after="2019-07-07 00:00:00"
+
+# muestra los cambios realizados antes de la fecha especificada
+git log --before="2019-07-08 00:00:00"
+
+# muestra los cambios realizados en el rango de fecha especificado
+git log --after="2019-07-07 00:00:00" --before="2019-07-08 00:00:00"
+
+# muestra una gráfica del historial de cambios, rama y fusiones
+git log --oneline --graph --all
+
+# muestra todo el registro de acciones del log
+# incluyendo inserciones, cambios, eliminaciones, fusiones, etc.
+git reflog
+
+# diferencias entre el Working Directory y el Staging Area
+git diff
+
+# grafica el historial de commits en diversas ramas junto con resolucines de conflictos
+git log --online --graph -all
+
+Ejemplo:
+
+*   76716b2 (HEAD -> main) Fourth commit merge main/branch2
+|\
+| * 6539a9b (branch2) First commit branch2
+* | 48cedae Third commit update
+|/
+* 44d482a Second Commit
+
+
+RESETEO DEL HISTORIAL
+
+Podemos eliminar el historial de cambios del proyecto hacia adelante con respecto de un punto de referencia.
+
+#nos muestra el listado de archivos nuevos (untracked), borrados o editados
+git status
+
+# borra HEAD
+git reset --soft
+
+# borra HEAD y Staging
+git reset --mixed id
+
+# borra HEAD, Staging y Working Directory
+git reset --hard id
+
+# deshace todos los cambios después del commit indicado, preservando los cambios localmente
+git reset id-commit
+
+# desecha todo el historial y regresa al commit especificado
+git reset --hard id-commit
+
+
+RESETAR REPOSITORIO
+Si en algún momento tienes la necesidad de resetear el historial de cambios de un repositorio para que quede como si lo acabarás de crear ejecuta esta serie de comandos:
+
+cd carpeta-repositorio
+mv .git/config ~/saved_git_config
+rm -rf .git
+git init
+git branch -M main
+git add .
+git commit -m "Commit inicial"
+mv ~/saved_git_config .git/config
+git push --force origin main
+
+
+REMOTOS
+
+# muestra los orígenes remotos del repositorio
+git remote
+
+# muestra los orígenes remotos con detalle
+git remote -v
+
+# agregar un orígen remoto
+git remote add nombre-orígen https://github.com/usuario/repositorio.git
+
+# renombrar un orígen remoto
+git remote rename nombre-viejo nombre-nuevo
+
+# eliminar un orígen remoto
+git remote remove nombre-orígen
+
+# descargar una rama remota a local diferente a la principal
+git checkout --track -b rama-remota origin/rama-remota
+
+
+ETIQUETAS
+
+Con esta opción git nos permite versionar nuestro código, librería o proyecto.
+
+# listar etiquetas
+git tag
+
+# crea una etiqueta
+git tag numero-versión
+
+# eliminar una etiqueta
+git tag -d numero-versión
+
+# mostrar información de una etiqueta
+git show numero-versión
+
+# sincronizando la etiqueta del repositorio local al remoto
+git add .
+git  tag v1.0.0
+git commit -m "v1.0.0"
+git push origin numero-versión
+
+# generando una etiqueta anotada (con mensaje de commit)
+git add .
+git tag -a "v1.0.0" -m "Mensaje de la etiqueta"
+git push --tags
+
+
+GITHUB PAGES
+
+gh-pages es una rama especial para crear un sitio web a tu proyecto alojado directamente en tu repositorio de GitHub.
+
+URL del repositorio: https://github.com/usuario/repositorio
+URL del sitio: https://usuario.github.io/repositorio 
+       Ej. https://edwardohazo.github.io/git-course
+Para crear esta rama especial en GitHub ejecutamos los siguientes comandos:
+
+git branch gh-pages
+git checkout gh-pages
+
+git remote add origin https://github.com/usuario/repositorio.git
+git push origin gh-pages
+
+# para descargar los cambios del repositorio remoto al local
+git pull origin gh-pages
+
+
+COLABORACIÓN EN GITHUB
+
+Para poder colaborar en proyectos alojados en GitHub necesitamos hacer uso de los forks y pull requests, herramientas que nos ofrece la plataforma para dicho objetivo.
+
+A continuación describo el proceso de colaboración en GitHub.
+
+Forkea el repositorio en el que quieras colaborar, para hacerlo, sigue las instrucciones de este enlace.
+Una vez forkeado el repositorio en tu cuenta de GitHub, clónalo en tu equipo de cómputo.
+En el repositorio local hay que configurar los orígenes remotos de tu nueva copía para tener ambos remotos, los originales (origin) y los de tu copia, para hacerlo, sigue las instrucciones de este enlace.
+Crea una rama nueva en tu fork local para hacer tu colaboración, y sincrónizala con tu repositorio remoto, para hacerlo, sigue las instrucciones de este enlace.
+Configura tu repositorio para que acepté cambios (pull requests), para hacerlo, sigue las instrucciones de este enlace.
+Crea una pull request, para hacerlo, sigue las instrucciones de este enlace.
+Espera a que el dueño del repositorio original, acepte tus cambios.
+Una vez que acepten tu pull request, es recomendable que borres la rama en la que trabajaste el cambio y actualices tu repositorio forkeado, con los cambios del repositorio original.
+Anexo un resumen de los comandos a ejecutar para colaborar en un repositorio de GitHub:
+
+# forkear repositorio
+git clone https://github.com/usuario/repositorio.git
+git remote -v
+git remote rename origin fork
+git remote add origin https://github.com/usuario/repositorio.git
+git checkout -b rama-nueva
+git push fork rama-nueva
+# solicitar el pull request
+# aceptar el pull request
+git checkout main
+git pull origin main
+git push fork main
+git branch -d rama-nueva
+git push fork --delete rama-nueva
+
+
